@@ -1,0 +1,33 @@
+name: rust-ci
+
+on:
+    push:
+        paths:
+            - 'Cargo.toml'
+            - 'apps/rust/**'
+            - '.github/workflows/rust-ci.yml'
+    pull_request:
+        paths:
+            - 'Cargo.toml'
+            - 'apps/rust/**'
+            - '.github/workflows/rust-ci.yml'
+
+jobs:
+    build:
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+                toolchain: [stable]
+        runs-on: ${{ matrix.os }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: dtolnay/rust-toolchain@stable
+              with:
+                  toolchain: ${{ matrix.toolchain }}
+
+            - uses: Swatinem/rust-cache@v2
+
+            - name: Build (release)
+              run: cargo build --release

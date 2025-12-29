@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+:root {
+	font-family: 'Spline Sans Mono Variable', monospace;
+	line-height: 1.5;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+html,
+body {
+	width: var(--viewport-width);
+	height: var(--viewport-height);
+}
+#root,
+body,
+html {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+input:focus,
+input {
+	outline: none;
+	border: none;
+}
+
+.auth-layout {
+	background-image: url(https://images.pexels.com/photos/707344/pexels-photo-707344.jpeg?auto=compress&cs=tinysrgb&w=1920);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.chat-background {
+	background-image: url('@/assets/img/paper.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color: rgba(0, 0, 0, 0.5);
+	background-blend-mode: multiply;
+}

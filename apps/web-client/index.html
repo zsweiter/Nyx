@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/ico" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Nyx - Anonymous connection</title>
+		<script>
+			(function (w, d, el) {
+				var head = d.head,
+					rem = function (val, by) {
+						return val / by;
+					};
+				var updateViewportVars = function () {
+					var divBy = parseInt(getComputedStyle(el).getPropertyValue('font-size'));
+					var width = w.innerWidth || el.clientWidth || d.body.clientWidth;
+					var height = w.innerHeight || el.clientHeight || d.body.clientHeight;
+					var css =
+						':root { --viewport-width: ' +
+						String(rem(width, divBy)) +
+						'rem; --viewport-height: ' +
+						String(rem(height, divBy)) +
+						'rem; }';
+
+					var style = head.querySelector('#__cross-viewport-vars__');
+					if (!style) {
+						style = d.createElement('style');
+						style.id = '__cross-viewport-vars__';
+						style.setAttribute('type', 'text/css');
+						head.appendChild(style);
+					}
+
+					style.textContent = css.trim();
+					var event = d.createEvent('CustomEvent');
+					event.initCustomEvent('viewportupdate', true, true, { width: width, height: height });
+					w.dispatchEvent(event);
+				};
+				var debounce = function (func, timeout) {
+					var timer;
+					return function () {
+						var args = arguments;
+						clearTimeout(timer);
+						timer = setTimeout(function () {
+							func.apply(null, args);
+						}, timeout);
+					};
+				};
+				var onLoad = function () {
+					updateViewportVars();
+					w.addEventListener('resize', debounce(updateViewportVars, 400));
+				};
+				d.readyState !== 'loading' ? onLoad() : d.addEventListener('DOMContentLoaded', onLoad);
+			})(window, document, document.documentElement);
+		</script>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
+	</body>
+</html>

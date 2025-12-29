@@ -1,0 +1,44 @@
+name: deploy-pages
+
+on:
+    workflow_dispatch:
+    push:
+        branches: ['main']
+        paths:
+            - 'apps/web-client/**'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - 'package.json'
+            - '.github/workflows/deploy-pages.yml'
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 9.15.4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'pnpm'
+
+            - name: Install
+              run: pnpm install --frozen-lockfile
+
+            - name: Build
+              run: pnpm -C apps/web-client run build
+
+            - name: Deploy
+              uses: cloudflare/pages-action@v1
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  projectName: ${{ secrets.CLOUDFLARE_PAGES_PROJECT }}
+                  directory: apps/web-client/dist
+                  gitHubToken: ${{ secrets.GITHUB_TOKEN }}
