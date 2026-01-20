@@ -7,6 +7,7 @@ import { URL } from 'url';
 
 import debugMode from 'debug';
 import { Pipeline } from '../pipeline';
+import { config } from '../../config';
 const debug = debugMode('streamline:');
 
 interface WebSocketOptions {
@@ -61,8 +62,17 @@ export class StreamlineServer {
 		return this;
 	}
 
-	protected onUpgrade(request: IncomingMessage, socket: internal.Duplex, head: Buffer) {
+protected onUpgrade(request: IncomingMessage, socket: internal.Duplex, head: Buffer) {
 		this._url = new URL(request.url || '', `http://${request.headers.host}`);
+
+		// CORS validation for WebSocket
+		const origin = request.headers.origin;
+		if (origin && !config.CORS_ORIGINS.includes(origin)) {
+			debug('CORS rejected for origin: ' + origin);
+			socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+			socket.destroy();
+			return;
+		}
 
 		if (this.URL.pathname === this._path) {
 			this.withAuthentication(request, this._url)

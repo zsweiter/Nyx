@@ -14,4 +14,6 @@ export const config = {
     JWT_ISSUER: process.env.JWT_ISSUER || 'silent',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'silent',
     JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '5h',
+
+    CORS_ORIGINS: process.env.CORS_ORIGINS?.split(',').map(origin => origin.trim()) || ['http://localhost:5173', 'https://localhost:5173'],
 };

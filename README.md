@@ -1,102 +1,219 @@
-# Nyx: End-to-End Encrypted Messaging Platform
+# 🜂 Nyx — End-to-End Encrypted Messaging Platform
 
-Nyx is a next-generation, end-to-end encrypted messaging platform. It is designed for privacy, security, and future peer-to-peer (P2P) support. The project uses Diffie-Hellman encryption for messages and files, removes metadata from files, and anonymizes all binaries. The architecture is modular, supporting web, server, and CLI clients, with a roadmap for WASM-based anonymization and advanced P2P features.
+**Nyx** is a next-generation, privacy-first messaging platform focused on **end-to-end encryption**, **minimal metadata exposure**, and a **future-proof P2P architecture**.
 
-## Project Overview
+The project is designed as a **modular monorepo**, supporting a web client, a Node.js backend, and a Rust-based CLI. Nyx is currently under active development, with peer-to-peer messaging and WASM-based anonymization planned in upcoming releases.
 
-- **End-to-end encrypted messaging**: All messages and files are encrypted using Diffie-Hellman key exchange.
-- **Metadata removal**: Files shared through the platform are stripped of metadata for privacy.
-- **Anonymization**: All binaries are anonymized; future releases will include advanced anonymization via Rust (WASM).
-- **Peer-to-peer (P2P) support**: P2P messaging is in development (stage), with a Rust CLI as the foundation.
-- **Multi-platform**: Includes a web client (React + Vite), a Node.js server, and a Rust CLI.
+> ⚠️ **Security Notice**
+> Nyx is experimental software. Cryptographic designs and implementations have not yet been formally audited. Do not use in production or for high-risk threat models.
 
-## Monorepo Structure
+---
+
+## ✨ Core Principles
+
+- **End-to-end encryption by default**
+  Messages and files are encrypted using Diffie-Hellman key exchange and modern symmetric cryptography.
+
+- **Metadata minimization**
+  Shared files are stripped of embedded metadata to reduce information leakage.
+
+- **Anonymization-ready architecture**
+  Binary and file anonymization is supported, with advanced WASM-based tooling planned (Rust).
+
+- **P2P-first roadmap**
+  Centralized services are transitional. Native P2P communication is a primary long-term goal.
+
+- **Modular & extensible**
+  Shared event definitions and decoupled services enable multiple clients and transports.
+
+---
+
+## 🗂 Monorepo Structure
 
 ```
 .
+├─ certs/              # TLS certificates (development only)
 ├─ apps/
-│  ├─ web-client/      # React + Vite web client
+│  ├─ web-client/      # React + Vite web application
 │  ├─ server-node/     # Node.js (TypeScript) backend
-│  └─ cli-rust/        # Rust CLI (P2P, encryption)
+│  └─ cli-rust/        # Rust CLI (encryption & P2P groundwork)
 ├─ packages/
-│  └─ events/          # Shared event types
-├─ scripts/            # Utility scripts (e.g., key generation)
-├─ .github/workflows/  # CI/CD workflows
-├─ CODE_OF_CONDUCT.md  # Contributor Covenant
-├─ Cargo.toml          # Rust workspace
-├─ package.json        # JS/TS monorepo
-├─ pnpm-workspace.yaml # pnpm workspace config
+│  └─ events/          # Shared event and protocol definitions
+├─ scripts/            # Utility scripts (keys, certificates, tooling)
+├─ .github/workflows/  # CI/CD pipelines
+├─ Cargo.toml          # Rust workspace configuration
+├─ package.json        # JavaScript/TypeScript monorepo config
+├─ pnpm-workspace.yaml # pnpm workspace definition
+├─ CODE_OF_CONDUCT.md
+└─ LICENSE
 ```
 
-## Technologies
+---
 
-- **Frontend**: React, Vite, Redux Toolkit, TypeScript, TailwindCSS
-- **Backend**: Node.js, Express, WebSockets (ws), MongoDB, JWT, TypeScript
-- **CLI**: Rust (tokio, libp2p, aes-gcm, p256, etc.)
-- **Security**: Diffie-Hellman key exchange, AES-GCM encryption, metadata removal
+## 🧰 Technology Stack
 
-## Features
+### Frontend
 
-- End-to-end encrypted chat and file sharing
-- WebSocket-based real-time communication
-- Peer-to-peer (P2P) architecture (in progress)
-- CLI for encrypted chat and P2P (Rust, in progress)
-- File metadata stripping and binary anonymization (WASM planned)
-- Modular event system for extensibility
+- React
+- Vite
+- Redux Toolkit
+- TypeScript
+- Tailwind CSS
 
-## Roadmap & Missing Features
+### Backend
 
-- [ ] Implement full P2P messaging in Rust CLI
-- [ ] WASM-based anonymization for files and binaries
+- Node.js
+- Express (planned future integration with fastify)
+- WebSockets
+- MongoDB
+- Jose (JSON Web Tokens)
+- TypeScript
+
+### CLI / P2P
+
+- Rust
+- tokio
+- libp2p (planned / in progress)
+- aes-gcm
+- p256
+
+### Cryptography & Privacy
+
+- Diffie-Hellman key exchange
+- AES-GCM symmetric encryption
+- File metadata stripping
+- Planned WASM-based anonymization
+
+---
+
+## 🚀 Features
+
+- End-to-end encrypted messaging
+- Encrypted file sharing
+- Real-time communication via WebSockets
+- Modular event-driven architecture
+- Rust CLI for encrypted messaging (early stage)
+- P2P communication groundwork (in progress)
+
+---
+
+## 🛣 Roadmap
+
+> The following features are **planned or partially implemented**:
+
+- [ ] Fully decentralized P2P messaging (Rust + libp2p)
+- [ ] WASM-based anonymization pipeline
+- [ ] Cryptographic audit & threat model documentation
 - [ ] Automated tests (backend, frontend, CLI)
-- [ ] API documentation (OpenAPI/Swagger)
-- [ ] Cloudflare Workers server (future)
-- [ ] End-to-end encryption for all transports
-- [ ] Integration between CLI and backend
-- [ ] User and developer documentation
+- [ ] OpenAPI / Swagger API documentation
+- [ ] Cloudflare Workers edge backend (optional path)
+- [ ] Transport-agnostic end-to-end encryption
+- [ ] CLI ↔ backend interoperability
+- [ ] User & developer documentation
 
-## Getting Started
+---
+
+## 🧑‍💻 Getting Started
 
 ### Prerequisites
 
-- Node.js 20+
-- pnpm 9.x
-- Rust stable (for CLI)
+- Node.js **20+**
+- pnpm **9.x**
+- Rust (stable toolchain)
 
-### Install dependencies
+---
+
+### Install Dependencies
 
 ```sh
 pnpm install
 ```
 
-### Build all workspaces
+---
+
+### Build All Workspaces
 
 ```sh
 pnpm build
 ```
 
-### Development
+---
 
-- Web client: `pnpm -C apps/web-client dev`
-- Server: `pnpm -C apps/server-node dev`
-- CLI: `cargo run -p cli-rust`
+## 🔐 Development Setup
 
-### Key Generation
+### Server Key Generation
 
-Generate server keys for Node.js backend:
+Generate cryptographic keys for the Node.js backend:
 
 ```sh
 pnpm run generate-server-keys
 ```
 
-## Contributing
+---
 
-Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+### TLS Certificates (Local HTTPS)
 
-## License
+Nyx uses HTTPS locally.
+Certificates are generated using **mkcert**.
 
-This repository is licensed under AGPL-3.0-only. See [LICENSE](LICENSE) for details.
+1. Install mkcert
+   👉 [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
+
+2. Generate certificates:
+
+```sh
+pnpm run generate-ssl-certificates
+```
+
+> Certificates are for **local development only** and must not be committed.
 
 ---
 
-**Note:** This project is under active development. Many features (P2P, WASM anonymization, tests, Cloudflare Workers, and full end-to-end encryption) are in progress or planned. Contributions are welcome!
+### Run Development Servers
+
+- **Web client**
+
+    ```sh
+    pnpm -C apps/web-client dev
+    ```
+
+- **Backend server**
+
+    ```sh
+    pnpm -C apps/server-node dev
+    ```
+
+- **Rust CLI**
+
+    ```sh
+    cargo run -p cli-rust
+    ```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+Please read the [Code of Conduct](CODE_OF_CONDUCT.md) before submitting issues or pull requests.
+
+If you are contributing cryptographic or P2P-related code, include:
+
+- clear documentation
+- threat assumptions
+- rationale for algorithm choices
+
+---
+
+## 📄 License
+
+Nyx is licensed under **AGPL-3.0-only**.
+See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🧪 Project Status
+
+> 🚧 **Active development / Experimental**
+
+Nyx is evolving rapidly. APIs, cryptographic internals, and transport layers may change without notice.

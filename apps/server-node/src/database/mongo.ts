@@ -1,5 +1,5 @@
-import { MongoClient, Document, CollectionOptions } from "mongodb";
-import { config } from "../config";
+import { MongoClient, Document, CollectionOptions } from 'mongodb';
+import { config } from '../config';
 
 const instances = {
 	def: null as MongoClient | null,

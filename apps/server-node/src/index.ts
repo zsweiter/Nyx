@@ -3,6 +3,8 @@ import express from 'express';
 import https from 'node:https';
 import cors from 'cors';
 import fs from 'node:fs';
+import path from 'node:path';
+import { config } from './config';
 
 import { route as userRoutes } from './routes/user.routes';
 import { route as messagesRoutes } from './routes/messages.routes';
@@ -21,29 +23,32 @@ import { registryServices } from './registry';
 
 const app = express();
 
-app.use(
-	cors({
-		origin: '*',
-		credentials: true,
-		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-		allowedHeaders: [
-			'Content-Type',
-			'Authorization',
-			'auth-token',
-			'Origin',
-			'Accept',
-			'X-Requested-With',
-			'Cache-Control',
-			'Access-Control-Allow-Origin',
-		],
-	})
-);
+const corsOptions = {
+	origin: config.CORS_ORIGINS,
+	credentials: true,
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
+	allowedHeaders: [
+		'Content-Type',
+		'Authorization',
+		'auth-token',
+		'Origin',
+		'Accept',
+		'X-Requested-With',
+		'Cache-Control',
+		'Access-Control-Allow-Origin',
+	],
+};
+
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
 	// @ts-ignore
 	req.container = container;
+
+	console.log('Request:', req.method, req.url);
 	next();
 });
 
+app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -51,8 +56,8 @@ app.use(express.urlencoded({ extended: true }));
 registryServices();
 
 const options = {
-	key: fs.readFileSync('./cert/key.pem'),
-	cert: fs.readFileSync('./cert/cert.pem'),
+	key: fs.readFileSync(path.join(__dirname, '../../../certs/localhost-key.pem')),
+	cert: fs.readFileSync(path.join(__dirname, '../../../certs/localhost.pem')),
 };
 
 const httpServer = https.createServer(options, app);
