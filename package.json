@@ -9,6 +9,6 @@
 		"dev:client": "pnpm --filter web-client dev",
 		"dev:server": "pnpm --filter server-node dev",
 		"generate-server-keys": "bash scripts/generate-server-key-pairs.sh",
-		"generate-dev-ssl-keys": "bash scripts/generate-dev-ssl-keys.sh"
+		"generate-ssl-certificates": "bash scripts/generate-dev-ssl-keys.sh"
 	}
 }
